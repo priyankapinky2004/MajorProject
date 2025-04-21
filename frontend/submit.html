@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Article - FactNet</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-check-circle me-2"></i>FactNet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="submit.html">Submit Article</a>
+                    </li>
+                    <li class="nav-item" id="dashboard-link" style="display: none;">
+                        <a class="nav-link" href="dashboard.html">Dashboard</a>
+                    </li>
+                </ul>
+                <!-- Auth Buttons -->
+                <div id="auth-buttons">
+                    <a href="/api/auth/google" class="btn btn-light" id="login-btn">
+                        <i class="fab fa-google me-1"></i> Login
+                    </a>
+                </div>
+                <!-- User Profile (hidden by default) -->
+                <div class="dropdown" id="user-profile" style="display: none;">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img id="user-avatar" src="" alt="User" class="avatar-img">
+                        <span id="user-name"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
+                        <li><a class="dropdown-item" href="bookmarks.html">Bookmarks</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logout-btn">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-newspaper me-2"></i>Submit Article for Fact-Checking</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Login Required Message -->
+                        <div id="login-required-message" class="alert alert-warning" style="display: none;">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            You need to <a href="/api/auth/google">login</a> to submit an article for fact-checking.
+                        </div>
+                        
+                        <!-- Submit Form (hidden until logged in) -->
+                        <form id="submit-article-form" style="display: none;">
+                            <div class="mb-3">
+                                <label for="article-url" class="form-label">Article URL *</label>
+                                <input type="url" class="form-control" id="article-url" placeholder="https://example.com/news-article" required>
+                                <div class="form-text">Enter the full URL of the article you want to fact-check.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="article-title" class="form-label">Article Title *</label>
+                                <input type="text" class="form-control" id="article-title" placeholder="Enter the article title" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="article-description" class="form-label">Brief Description</label>
+                                <textarea class="form-control" id="article-description" rows="3" placeholder="Briefly describe what the article is about"></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="article-source" class="form-label">Source Name</label>
+                                <input type="text" class="form-control" id="article-source" placeholder="e.g., CNN, BBC, Reuters">
+                                <div class="form-text">Where was this article published?</div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary" id="submit-btn">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit for Fact-Checking
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Success Message -->
+                        <div id="submit-success" class="alert alert-success" style="display: none;">
+                            <h5><i class="fas fa-check-circle me-2"></i>Article Submitted Successfully!</h5>
+                            <p>Thank you for contributing to fact-checking efforts. Your submission has been received and will be analyzed.</p>
+                            <p class="mb-0">You can view the article status <a id="article-link" href="#">here</a> or <a href="index.html">return to the homepage</a>.</p>
+                        </div>
+                        
+                        <!-- Error Message -->
+                        <div id="submit-error" class="alert alert-danger" style="display: none;">
+                            <h5><i class="fas fa-exclamation-triangle me-2"></i>Submission Error</h5>
+                            <p id="error-message">There was an error submitting your article. Please try again.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Article Submission Guidelines</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Only submit publicly accessible articles from legitimate news sources.</li>
+                            <li>Ensure the URL is correct and leads directly to the article.</li>
+                            <li>Articles in languages other than English are accepted but may take longer to process.</li>
+                            <li>Provide accurate information about the article to help our fact-checkers.</li>
+                            <li>Submissions are reviewed by our community of fact-checkers.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Rewards</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Earn badges and build your reputation by submitting articles for fact-checking:</p>
+                        <ul>
+                            <li><span class="badge bg-secondary">Newcomer</span> - Join the community</li>
+                            <li><span class="badge bg-info">Fact Checker</span> - Submit 5+ articles</li>
+                            <li><span class="badge bg-primary">Trusted Validator</span> - 10+ approved submissions</li>
+                            <li><span class="badge bg-warning text-dark">Accuracy Expert</span> - 80+ trust score</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="badges.html" class="btn btn-outline-primary btn-sm">Learn more about badges</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>FAQs</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="faqAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        How long does fact-checking take?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Fact-checking typically takes 24-48 hours depending on the complexity of the article and availability of fact-checkers.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How are fact-check scores calculated?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        Scores are based on a combination of algorithmic analysis, expert verification, source credibility assessment, and community feedback.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        Can I submit any type of content?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        FactNet focuses on news articles from legitimate publications. Opinion pieces, blog posts, and social media content may be accepted but with lower priority.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">FactNet</h5>
+                    <p>
+                        A modular fact-checking platform for verifying news articles.
+                        Join us in the fight against misinformation.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Links</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="index.html" class="text-dark">Home</a></li>
+                        <li><a href="about.html" class="text-dark">About</a></li>
+                        <li><a href="submit.html" class="text-dark">Submit Article</a></li>
+                        <li><a href="terms.html" class="text-dark">Terms & Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Follow Us</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="#" class="text-dark"><i class="fab fa-twitter me-2"></i>Twitter</a></li>
+                        <li><a href="#" class="text-dark"><i class="fab fa-facebook me-2"></i>Facebook</a></li>
+                        <li><a href="#" class="text-dark"><i class="fab fa-instagram me-2"></i>Instagram</a></li>
+                        <li><a href="#" class="text-dark"><i class="fab fa-github me-2"></i>GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3 bg-primary text-white">
+            © 2023 FactNet - All Rights Reserved
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Config file with API URL -->
+    <script src="js/config.js"></script>
+    <!-- Auth Service -->
+    <script src="js/auth.service.js"></script>
+    <!-- Article Service -->
+    <script src="js/article.service.js"></script>
+    <!-- Submit Article JavaScript -->
+    <script src="js/submit.js"></script>
+</body>
+</html>

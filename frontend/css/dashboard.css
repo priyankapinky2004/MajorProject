@@ -1,0 +1,172 @@
+/* Dashboard Specific Styles */
+
+body {
+    font-size: .875rem;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  }
+  
+  @media (max-width: 767.98px) {
+    .sidebar {
+      top: 5rem;
+    }
+  }
+  
+  .sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  }
+  
+  .sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .sidebar .nav-link.active {
+    color: #0d6efd;
+  }
+  
+  .sidebar .nav-link:hover {
+    color: #0d6efd;
+  }
+  
+  .sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #727272;
+  }
+  
+  .sidebar .nav-link.active .feather {
+    color: #0d6efd;
+  }
+  
+  .sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+  }
+  
+  /* Navbar */
+  .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+  }
+  
+  .navbar .navbar-toggler {
+    top: .25rem;
+    right: 1rem;
+  }
+  
+  /* Dashboard cards */
+  .card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-header {
+    background-color: rgba(0, 0, 0, .03);
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+  }
+  
+  .card .card-title {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Stats cards with border-left styling */
+  .card.border-left-primary,
+  .card.border-left-success,
+  .card.border-left-info,
+  .card.border-left-warning,
+  .card.border-left-danger {
+    border-left-width: 0.25rem !important;
+    border-radius: 0.25rem;
+  }
+  
+  /* Dashboard sections */
+  .dashboard-section {
+    margin-bottom: 2rem;
+  }
+  
+  /* Table styles */
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .table th {
+    vertical-align: middle;
+    background-color: #f8f9fa;
+  }
+  
+  .table td {
+    vertical-align: middle;
+  }
+  
+  /* Article title in table */
+  .article-title-link {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .article-title-link:hover {
+    color: #0d6efd;
+    text-decoration: underline;
+  }
+  
+  /* Action buttons */
+  .action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Pagination */
+  .pagination {
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+  
+  /* Custom background for stats cards */
+  .text-xs {
+    font-size: 0.7rem;
+  }
+  
+  .text-gray-800 {
+    color: #5a5c69 !important;
+  }
+  
+  .text-gray-300 {
+    color: #dddfeb !important;
+  }
+  
+  /* Search and filters */
+  #articles-search,
+  #articles-category-filter,
+  #articles-date-filter {
+    margin-bottom: 1rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (min-width: 768px) {
+    main {
+      padding-top: 1.5rem !important;
+    }
+    
+    .navbar-brand {
+      width: 16.66666667%;
+      padding-left: 1.5rem;
+      margin-left: -1.5rem;
+    }
+  }
